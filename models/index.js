@@ -18,5 +18,4 @@ const motocicleta = sequelize.define('motocicleta', {
         type: Sequelize.DECIMAL(10, 3)
     }
 });
-
-exports.motocicleta=motocicleta;
+exports.motocicleta = motocicleta;

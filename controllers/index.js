@@ -1,31 +1,23 @@
 const {motocicleta} = require("../models");
-const {send} = require("micro");
-
 //list all motorcycle
 const getMoto = async (req, res) => {
     try {
-        const data = await motocicleta.findAll().then(data => {
-            return data[0].dataValues
-        });
-        send(res, 200, data);
+        const data = await motocicleta.findAll().then(function(datax){ return datax });
+        res.status(200)
+            .json({
+                success: true,
+                data: JSON.stringify(data)
+            })
     } catch (err) {
-        console.log(err);
-        send(res, 500, err);
+        res.status(400)
+            .json({
+                success: false,
+                message: err.message
+            });
+        return Promise.reject(err);
     }
 };
 exports.getMoto = getMoto;
-
-
-//function to add motorcycle
-const addMoto = async (req, res) => {
-    try {
-        send(res, 200, {succes: true});
-    } catch (err) {
-        console.log(err);
-        send(res, 500, err);
-    }
-};
-exports.addMoto = addMoto;
 
 // delete any model motorcycle
 const dropMoto = async (req, res) => {
@@ -38,7 +30,6 @@ const dropMoto = async (req, res) => {
 };
 exports.dropMoto = dropMoto;
 
-
 //update a motorcycle
 const updateMoto = async (req, res) => {
     try {
@@ -49,3 +40,17 @@ const updateMoto = async (req, res) => {
     }
 };
 exports.updateMoto = updateMoto;
+
+//function to add motorcycle
+const addMoto = async (req, res) => {
+    try {
+        console.log(req.body);
+        motocicleta.create(req.body)
+            .then(function(data){return data})
+            .catch();
+    } catch (err) {
+        console.log(err);
+        send(res, 500, err);
+    }
+};
+exports.addMoto = addMoto;

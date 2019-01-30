@@ -1,15 +1,37 @@
-const { send } = require ("micro");
-const { get, post, router } = require ("microrouter");
+const express = require("express"),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
+    app = express(),
+    port = 3000,
+    publicDir = './';
+const corsOptions = {
+    origin: "http://localhost:3000"
+};
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false})); // support encoded bodies
+app.set('json spaces', 4);
+
 const createTable = require("./utils/CreateTable");
-const {getMoto, addMoto, dropMoto, updateMoto}= require("./controllers");
+const {getMoto, addMoto, dropMoto, updateMoto} = require("./controllers");
 
-function index(req,res) {
-    send(res,200,{message:"connect"});
-}
+app.get("/list", (req, res) => {
+    getMoto(req.body)
+        .then((resp) => {
+            console.log(resp);
+            res.json(resp);
+        })
+        .catch((err) => {
+            res.json(err);
+        });
+});
 
-module.exports= router(
-    get('/', index),
-    get('/createTable', createTable),
-    get('/list',getMoto),
-    get('/add',addMoto),
-);
+app.get("/createTable",createTable);
+app.post("/list",getMoto);
+app.post("/add",addMoto);
+
+app.use(express.static(publicDir));
+// START THE SERVER
+// =============================================================================
+app.listen(port);
+console.log('==============================\nBackend on port %s\n==============================', port);
