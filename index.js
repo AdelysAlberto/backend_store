@@ -1,30 +1,15 @@
-const express = require("express");
-const   app = express(),
-        hostname = '0.0.0.0',
-        port = 3000,
-        publicDir = './';
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
-const sequelize = new Sequelize('store', 'root', 'root', {
-    host: 'localhost',
-    dialect: 'mysql',
-    operatorsAliases: Op,
-});
-app.set('json spaces', 4);
+const { send } = require ("micro");
+const { get, post, router } = require ("microrouter");
+const createTable = require("./utils/CreateTable");
+const {getMoto, addMoto, dropMoto, updateMoto}= require("./controllers");
 
+function index(req,res) {
+    send(res,200,{message:"connect"});
+}
 
-sequelize.authenticate()
-    .then(() => {
-        console.log('Conectado')
-    })
-    .catch(err => {
-        console.log('No se conecto')
-    });
-
-
-app.use(express.static(publicDir));
-
-// START THE SERVER
-// =============================================================================
-app.listen(port);
-console.log('==============================\nBackend on port %s\n==============================', port);
+module.exports= router(
+    get('/', index),
+    get('/createTable', createTable),
+    get('/list',getMoto),
+    get('/add',addMoto),
+);
