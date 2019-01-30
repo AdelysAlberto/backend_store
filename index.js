@@ -15,19 +15,8 @@ app.set('json spaces', 4);
 const createTable = require("./utils/CreateTable");
 const {getMoto, addMoto, dropMoto, updateMoto} = require("./controllers");
 
-app.get("/list", (req, res) => {
-    getMoto(req.body)
-        .then((resp) => {
-            console.log(resp);
-            res.json(resp);
-        })
-        .catch((err) => {
-            res.json(err);
-        });
-});
-
 app.get("/createTable",createTable);
-app.post("/list",getMoto);
+app.get("/list",getMoto);
 app.post("/add",addMoto);
 
 app.use(express.static(publicDir));

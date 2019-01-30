@@ -3,11 +3,8 @@ const {motocicleta} = require("../models");
 const getMoto = async (req, res) => {
     try {
         const data = await motocicleta.findAll().then(function(datax){ return datax });
-        res.status(200)
-            .json({
-                success: true,
-                data: JSON.stringify(data)
-            })
+        console.log(data);
+        res.send(data);
     } catch (err) {
         res.status(400)
             .json({
