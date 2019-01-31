@@ -2,9 +2,14 @@ const {motocicleta} = require("../models");
 //list all motorcycle
 const getMoto = async (req, res) => {
     try {
-        const data = await motocicleta.findAll().then(function(datax){ return datax });
-        console.log(data);
-        res.send(data);
+        const data = await motocicleta.findAll().then(function (datax) {
+            return datax
+        });
+        res.status(400)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         res.status(400)
             .json({
@@ -16,21 +21,34 @@ const getMoto = async (req, res) => {
 };
 exports.getMoto = getMoto;
 
-// delete any model motorcycle
-const dropMoto = async (req, res) => {
+//function to add motorcycle
+const addMoto = async (req, res) => {
     try {
-        send(res, 200, {succes: true});
+        const data = await motocicleta.create(req.body).then(function (datax) {
+            return datax
+        });
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         console.log(err);
         send(res, 500, err);
     }
 };
-exports.dropMoto = dropMoto;
+exports.addMoto = addMoto;
 
-//update a motorcycle
+
+//function to add motorcycle
 const updateMoto = async (req, res) => {
     try {
-        send(res, 200, {succes: true});
+        const data = await motocicleta.update({ nombre : 'mama' },{ where : { nombre :'moto'}});
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         console.log(err);
         send(res, 500, err);
@@ -38,16 +56,20 @@ const updateMoto = async (req, res) => {
 };
 exports.updateMoto = updateMoto;
 
-//function to add motorcycle
-const addMoto = async (req, res) => {
+
+// delete any model motorcycle
+const deleteMoto = async (req, res) => {
     try {
-        console.log(req.body);
-        motocicleta.create(req.body)
-            .then(function(data){return data})
-            .catch();
+        const data = await motocicleta.destroy({ where : { nombre :'mama'}});
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         console.log(err);
         send(res, 500, err);
     }
 };
-exports.addMoto = addMoto;
+exports.deleteMoto = deleteMoto;
+

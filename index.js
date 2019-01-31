@@ -13,11 +13,14 @@ app.use(bodyParser.urlencoded({extended: false})); // support encoded bodies
 app.set('json spaces', 4);
 
 const createTable = require("./utils/CreateTable");
-const {getMoto, addMoto, dropMoto, updateMoto} = require("./controllers");
+const {getMoto, addMoto, deleteMoto, updateMoto} = require("./controllers");
 
 app.get("/createTable",createTable);
 app.get("/list",getMoto);
+app.put("/update/:id",updateMoto);
 app.post("/add",addMoto);
+app.post("/delete", deleteMoto);
+
 
 app.use(express.static(publicDir));
 // START THE SERVER
