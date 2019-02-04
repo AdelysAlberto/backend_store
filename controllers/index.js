@@ -1,25 +1,37 @@
 const {motocicleta} = require("../models");
-const {send} = require("micro");
-
 //list all motorcycle
 const getMoto = async (req, res) => {
     try {
-        const data = await motocicleta.findAll().then(data => {
-            return data[0].dataValues
+        const data = await motocicleta.findAll().then(function (datax) {
+            return datax
         });
-        send(res, 200, data);
+        res.status(400)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
-        console.log(err);
-        send(res, 500, err);
+        res.status(400)
+            .json({
+                success: false,
+                message: err.message
+            });
+        return Promise.reject(err);
     }
 };
 exports.getMoto = getMoto;
 
-
 //function to add motorcycle
 const addMoto = async (req, res) => {
     try {
-        send(res, 200, {succes: true});
+        const data = await motocicleta.create(req.body).then(function (datax) {
+            return datax
+        });
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         console.log(err);
         send(res, 500, err);
@@ -27,25 +39,37 @@ const addMoto = async (req, res) => {
 };
 exports.addMoto = addMoto;
 
-// delete any model motorcycle
-const dropMoto = async (req, res) => {
-    try {
-        send(res, 200, {succes: true});
-    } catch (err) {
-        console.log(err);
-        send(res, 500, err);
-    }
-};
-exports.dropMoto = dropMoto;
 
-
-//update a motorcycle
+//function to add motorcycle
 const updateMoto = async (req, res) => {
     try {
-        send(res, 200, {succes: true});
+        const data = await motocicleta.update({ nombre : 'mama' },{ where : { nombre :'moto'}});
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
     } catch (err) {
         console.log(err);
         send(res, 500, err);
     }
 };
 exports.updateMoto = updateMoto;
+
+
+// delete any model motorcycle
+const deleteMoto = async (req, res) => {
+    try {
+        const data = await motocicleta.destroy({ where : { nombre :'mama'}});
+        res.status(200)
+            .json({
+                success: true,
+                data: data
+            });
+    } catch (err) {
+        console.log(err);
+        send(res, 500, err);
+    }
+};
+exports.deleteMoto = deleteMoto;
+
